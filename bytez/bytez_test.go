@@ -88,3 +88,32 @@ func Benchmark_Performance_StringToReadOnlyBytes(b *testing.B) {
 		_ = StringToReadOnlyBytes(input)
 	}
 }
+
+// >>>>> >>>>> >>>>> >>>>> >>>>> IsAllBytesDigits
+
+func Test_Check_IsAllBytesDigits(t *testing.T) {
+	tests := []struct {
+		data     []byte
+		expected bool
+	}{
+		{data: []byte("12345"), expected: true},
+		{data: []byte("abc123"), expected: false},
+		{data: []byte(""), expected: true}, // Empty input is considered valid
+	}
+
+	for _, test := range tests {
+		result := IsAllBytesDigits(test.data)
+		if result != test.expected {
+			t.Errorf("For input %s, expected %v but got %v", test.data, test.expected, result)
+		}
+	}
+}
+
+func Benchmark_Performance_IsAllBytesDigits(b *testing.B) {
+	input := []byte("1234567890")
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = IsAllBytesDigits(input)
+	}
+}

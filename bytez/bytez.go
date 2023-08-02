@@ -1,6 +1,9 @@
 package bytez
 
-import "unsafe"
+import (
+	"unicode"
+	"unsafe"
+)
 
 // Quotation adds double quotes around a byte slice.
 func Quotation(slice []byte) (quoted []byte) {
@@ -35,4 +38,14 @@ func StringToReadOnlyBytes(s string) []byte {
 		Data uintptr
 		Len  int
 	}{uintptr(data), length}))
+}
+
+// IsAllBytesDigits checks if all bytes are digits.
+func IsAllBytesDigits(data []byte) bool {
+	for _, b := range data {
+		if !unicode.IsDigit(rune(b)) {
+			return false
+		}
+	}
+	return true
 }
