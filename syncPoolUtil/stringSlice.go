@@ -46,8 +46,17 @@ func (ssp *StringSlicePool) Get() (slice []string) {
 // Put returns a string slice to the pool.
 //
 //go:inline
-func (ssp *StringSlicePool) Put(strSlice []string) {
+func (ssp *StringSlicePool) Put(strSlice *[]string) {
+	// It's necessary to lock this section again.
+	// (这里要不要上锁，有必要时再说)
+	*strSlice = (*strSlice)[:0] // reset and clean slice (清空)
+	/*
+		Here is the issue:
+		it's crucial to pass a pointer as the parameter here, as otherwise the data won't be cleared promptly.
+		If another goroutine reads it while it's being modified, errors may occur.
+		(这里一定要传指标进入，不然资料不会被及时清空，如果被其他协程读取时会发生错误)
+	*/
 	if ssp.Inited.Load() {
-		ssp.Pool.Put(strSlice[:0])
+		ssp.Pool.Put((*strSlice)[:0])
 	}
 }

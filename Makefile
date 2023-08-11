@@ -6,6 +6,8 @@ test:
 	go test -v -run='^Test_Check_(\w+)' $(test_path)
 cover:
 	go test -cover -run='^Test_Check_(\w+)' $(test_path)
+race:
+	go test -run='Test_Race_(\w+)' $(test_path) -race
 benchmark:
 	go test -bench='^Benchmark_Performance_(\w+)' $(test_path)
 Comparator:
@@ -18,6 +20,7 @@ help:
 	@echo ""
 	@echo "  test       - Run unit tests 单元测试"
 	@echo "  cover      - Run coverage tests 复盖率测试"
+	@echo "  race       - Run race tests 竞争测试"
 	@echo "  benchmark  - Run benchmark tests 基准测试"
 	@echo "  Comparator - Run Comparator tests 对数器测试"
 	@echo ""
